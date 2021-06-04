@@ -1,0 +1,145 @@
+---
+title: "Proyecto"
+subtitle: "Tercer corte"
+author: "Laura Vanessa Reinoso"
+date: "3/6/2021"
+output:
+  html_document: default
+  pdf_document: default
+toc: TRUE
+---
+
+\pagebreak
+
+<div style = "text-align: justify">
+
+# Teorema del límite central
+
+El teorema central del límite, uno de los fundamentales en estadística, estudia el comportamiento de la suma de variables aleatorias, cuando crece el número de sumandos, asegurando su convergencia hacia una distribución normal en condiciones muy generales. Este teorema, del cual existen diferentes versiones que se han ido desarrollando a lo largo de la historia, tiene una gran aplicación en inferencia estadística, pues muchos parámetros de diferentes distribuciones de probabilidad, como la media, pueden expresarse en función de una   suma de variables. Permite también aproximar muchas distribuciones de uso frecuente: binomial, poisson, chi cuadrado, t-student, gamma, etc., cuando sus parámetros crecen y el cálculo se hace difícil.
+
+![Teorema del límite central](D:/Users/Laura Vanessa R/Documents/Bases de datos/Directorio/Github/Proyecto/TLC.png){width='300px' height='400px'}
+
+## Teorema
+
+Formalmente, el teorema expone
+
+Sean $X_{1}, X_{2}, ..., X_{n}$ variables aleatorias independientes e idénticamente distribuidas con $E[X_{i}] = \mu$ y $Var(X_{i}) = \sigma^2 < \infty$ se define
+
+$$
+Z_{n}:=\frac{\sum_{i=1}^n X_i - n\mu}{\sigma \sqrt{n}}
+$$
+
+Entonces la función de distribución de $Z_n$ en función de distribución normal estándar cuando $n \rightarrow \infty$, es decir,
+
+$$
+\lim_{n \rightarrow \infty}P(Z_n \leq z) = \phi(z) = \int_{-\infty}^z \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}dx
+$$
+
+Es muy común encontrarlo con la variable estandarizada $Z_n$ en función de la media muestral $\bar X$, es decir
+
+$$
+Z_n = \frac{\bar X - \mu}{\frac{\sigma}{\sqrt{n}}}
+$$
+
+puesto que son equivalentes (sólo se divide tanto numerador como denominador entre n).
+
+Es importante remarcar que este teorema no dice nada acerca de la distribución de la variable aleatoria $X_i$, excepto la existencia de media y varianza.
+
+## Aproximación de la binomial a la normal
+
+Sea $X$ una variable aleatoria con distribución geométrica de parámetros $n$ y $p$. Si $n$ es grande, entonces la distribución de $X$ es aproximadamente normal con esperanza $\mu = np$ y varianza $\sigma^2 = np(1 – p)$. En la práctica se suele utilizar esta aproximación cuando $np$ y $n(1 – p)$ son mayores que $5$, o bien cuando $n > 30$ .
+
+### Ejemplo
+
+Supongamos que jugamos diariamente a un número de una lotería que, entre otros premios, devuelve el importe jugado a todos los números que acaban en la misma cifra que el número ganador.
+
+Consideremos la variable $X(n)$, que no da el número de veces que nos han devuelto el importe jugado cuando se han realizado $n$ sorteos. En este caso sabemos que la variable aleatoria $X(n)$ sigue una distribución binomial de parámetros $n$ y $p = 0.1$. En efecto, se han hecho $n$ sorteos (es decir, se ha repetido un mismo experimento $n$ veces de manera independiente) y en cada sorteo la probabilidad de que nos devuelvan el dinero es $p = \frac{1}{10} = 0.1$ (probabilidad de éxito).
+
+¿Cuál es la probabilidad aproximada de que en un año nos hayan devuelto el dinero al
+menos cincuenta veces? De hecho, debemos calcular la probabilidad $P(X(365) \geq 50)$. Si
+quisiéramos obtener el valor exacto de esta probabilidad, por el hecho de que $X(365)$
+es una binomial de parámetros $365$ y $p = 0.1$, deberíamos hacer el cálculo siguiente:
+
+$$
+P(X(365) \geq 50) = 1 - P(X(365) < 50) = 
+$$
+
+$$
+1 - P(X(365) = 0) - P(X(365) = 1) -  P(X(365) = 2) - ... -  P(X(365) = 49)
+$$
+
+donde cada una de estas probabilidades se encontraría mediante la fórmula de la binomial que ya conocemos, en nuestro caso:
+
+$$
+P(X(365) = k) = \binom{365}{k}(0.1)^k(0.9)^{365-k}
+$$
+
+En cambio, si renunciamos a pedir que la probabilidad sea exacta y nos conformamos con una muy buena aproximación, podemos utilizar el hecho de que la distribución de $X(365)$ se puede aproximar por una normal de parámetros $\mu = 365 · 0.1 = 36.5$ y $\sigma^2 = 365 · 0,09 = 32.85$. Así:
+
+$$
+P(X(365) \geq 50) = P \left (\frac{X(365)-36.5}{\sqrt{32.85}} \geq \frac{50-36.5}{\sqrt{32.85}} \right )
+$$
+
+y si llamamos $Z$ a una variable aleatoria normal $(0,1)$, esta probabilidad será aproximadamente:
+
+$$
+P\left(Z \geq \frac{50-36.5}{\sqrt{32.85}}\right) = P(Z \geq 2.36) = 0.0091
+$$
+
+Por tanto, la probabilidad aproximada de que nos devuelvan el dinero cincuenta veces o más a lo largo del año es únicamente del $0.0091$.
+
+Observe que hemos calculado $P(X(365) \geq 50)$, pero que esta cantidad es la misma que $P(X(365) ≥ 49,5)$, ya que la variable sólo toma valores naturales. Fijese en que si la aproximamos por la normal, obtendremos:
+
+$$
+P(X(365) \geq 49.5) = P \left (\frac{X(365)-36.5}{\sqrt{32.85}} \geq \frac{49.5-36.5}{\sqrt{32.85}} \right )
+$$
+
+$$
+= P \left (Z \geq \frac{49.5-36.5}{\sqrt{32.85}} \right ) = P(Z \geq 2.26) = 0.0119
+$$
+
+que es una cantidad ligeramente diferente de la obtenida antes. Se dice que este valor se
+ha obtenido haciendo una corrección de continuidad, ya que aproximamos una variable discreta por una continua. Podemos considerar buenos los dos resultados.
+
+## Aproximación de una geométrica a la normal
+
+```{r, include=FALSE}
+library(magrittr)
+library(tidyverse)
+library(ggplot2)
+library(gganimate)
+library(gifski)
+```
+
+```{r, warning=FALSE, message=FALSE}
+geo <- function(n, prob){
+  x <- rgeom(n = n, prob = prob)
+  med <- mean(x)
+  mu1 <- (1-prob)/prob
+  mu2 <- (1-prob)/prob^2
+  (med - mu1)/sqrt((mu2/n))
+}
+
+Med <- replicate(1000, geo(200, 0.1))
+
+Med <- data.frame(n = 1:length(Med), x = Med)
+
+Med %<>% split(.$n) %>% accumulate(~ bind_rows(.x, .y)) %>% 
+  bind_rows(.id = "frame") %>% mutate(frame = as.integer(frame))
+
+h <- ggplot(data = Med, aes(x = x)) + 
+  geom_histogram(aes(y = ..density..), fill = "#00F295", colour = "#007347") + geom_density() + 
+  labs(x = "x", y = "density", title = "Aproximación de una geométrica a una normal") +
+  stat_function(fun = dnorm, colour = "#000A75", size = 2) + ylim(0, 0.8) + theme_minimal() + 
+  theme(plot.title = element_text(size = 18, face = "bold", hjust = 0.5))
+
+h
+
+anim <- h + transition_manual(frame) + ease_aes('sine-in-out') + 
+  enter_grow() + enter_fade() + 
+  view_follow(fixed_x = TRUE)
+
+anim
+```
+
+<div/>
